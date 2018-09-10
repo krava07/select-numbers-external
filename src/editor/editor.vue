@@ -19,6 +19,8 @@
             :text-expression-placeholder="template.textExpressionPlaceholder"
             :text-expression-error="template.textExpressionError"
             :text-expression-invalid="$v.schema[template.userNumberVariable].$error"
+
+            :is-new="isNew"
         />
     </div>
 </template>
@@ -31,7 +33,7 @@
 
     export default {
         name       : 'editor-select-numbers',
-        props      : ['template', 'schema', 'step', 'stepId', 'steps', 'readonly'],
+        props      : ['template', 'schema', 'step', 'stepId', 'steps', 'readonly', 'isNew'],
         components : {
             SelectNumbers
         },
@@ -51,20 +53,8 @@
         },
 
         created () {
-            const url = this.$flow.gatewayUrl('provider-numbers-list', this.$flow.providersAccountId());
-            this.$http.post(url, {accountId : this.$flow.accountId, getSmsNumbers : true})
-                .then(response => response.json())
-                .then(responseJson => {
-                    this.botNumbers = _.chain(responseJson)
-                        .map(number => ({
-                            id: number.id,
-                            label: !number.isGroup ? number.phoneNumber + ' (' + number.name + ')' : number.name,
-                            value: '`' + number.phoneNumber + '`'
-                        }))
-                        .sortBy('label')
-                        .value()
-                        .concat(this.botNumbers);
-                });
+            // this.schema.isNew = this.isNew;
+            this.fetchBotNumbers();
         },
 
         data () {
@@ -77,6 +67,22 @@
             onInput () {
                 this.$v.schema[this.template.botNumberVariable].$touch();
                 this.$v.schema[this.template.userNumberVariable].$touch();
+            },
+            fetchBotNumbers () {
+                const url = this.$flow.gatewayUrl('provider-numbers-list', this.$flow.providersAccountId());
+                this.$http.post(url, {accountId : this.$flow.accountId, getSmsNumbers : true})
+                    .then(response => response.json())
+                    .then(responseJson => {
+                        this.botNumbers = _.chain(responseJson)
+                            .map(number => ({
+                                id: number.id,
+                                label: !number.isGroup ? number.phoneNumber + ' (' + number.name + ')' : number.name,
+                                value: '`' + number.phoneNumber + '`'
+                            }))
+                            .sortBy('label')
+                            .value()
+                            .concat(this.botNumbers);
+                    });
             }
         },
 
@@ -96,7 +102,8 @@
         selectError                   : template.selectError,
         textExpressionLabel           : template.textExpressionLabel,
         textExpressionPlaceholder     : template.textExpressionPlaceholder,
-        textExpressionError           : template.textExpressionError
+        textExpressionError           : template.textExpressionError,
+        isNew                         : template.isNew
     });
 
     const customValidation = value => Boolean(value.slice(1,-1));

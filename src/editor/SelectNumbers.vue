@@ -112,6 +112,9 @@
             readonly            : {
                 type    : Boolean,
                 default : false
+            },
+            isNew : {
+                type : Boolean
             }
         },
 
@@ -129,7 +132,7 @@
                 get () {
                     let botNumber = _.get(this.value, 'botData');
 
-                    if (_.isEmpty(botNumber) || botNumber === '``') {
+                    if (this.isNew && (_.isEmpty(botNumber) || botNumber === '``')) {
                         botNumber = this.setMergeBotNumber(this.stepId);
                         if (botNumber === '``') {
                             return '';
@@ -145,7 +148,7 @@
             userNumber : {
                 get () {
                     let userNumber = _.get(this.value, 'userData');
-                    if (_.isEmpty(userNumber) || userNumber === '``') {
+                    if (this.isNew && (_.isEmpty(userNumber) || userNumber === '``')) {
                         userNumber = this.setMergeUserNumber(this.stepId);
                     }
                     return userNumber;
