@@ -93,7 +93,7 @@
     };
 
     export const meta = {
-        name    : 'test-select-numbers',
+        name    : 'test-external-component',
         type    : 'onereach-studio-form-input',
         version : '1.0'
     };

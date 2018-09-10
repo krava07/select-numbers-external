@@ -26,7 +26,7 @@
     import {validators} from '_validators';
     import SelectNumbers from './SelectNumbers.vue';
 
-    const {generateValidators} = validators;
+    const {generateValidators, required} = validators;
 
     export default {
         name       : 'editor-select-numbers',
@@ -49,22 +49,24 @@
             }
         },
 
-        // created () {
-        //     const url = this.$flow.gatewayUrl('provider-numbers-list', this.$flow.providersAccountId());
-        //     this.$http.post(url, {accountId : this.$flow.accountId, getSmsNumbers : true})
-        //         .then(response => response.json())
-        //         .then(responseJson => {
-        //             this.botNumbers = _.chain(responseJson)
-        //             .map(number => ({
-        //                 id: number.id,
-        //                 label: !number.isGroup ? number.phoneNumber + ' (' + number.name + ')' : number.name,
-        //                 value: '`' + number.phoneNumber + '`'
-        //             }))
-        //             .sortBy('label')
-        //             .value()
-        //             .concat(this.botNumbers);
-        //         });
-        // },
+        created () {},
+
+        mounted () {
+            const url = this.$flow.gatewayUrl('provider-numbers-list', this.$flow.providersAccountId());
+            this.$http.post(url, {accountId : this.$flow.accountId, getSmsNumbers : true})
+                .then(response => response.json())
+                .then(responseJson => {
+                    this.botNumbers = _.chain(responseJson)
+                    .map(number => ({
+                        id: number.id,
+                        label: !number.isGroup ? number.phoneNumber + ' (' + number.name + ')' : number.name,
+                        value: '`' + number.phoneNumber + '`'
+                    }))
+                    .sortBy('label')
+                    .value()
+                    .concat(this.botNumbers);
+                });
+        },
 
         data () {
             return {
@@ -95,23 +97,23 @@
         textExpressionError       : template.textExpressionError
     });
 
-    const customValidation = value => {
-        return Boolean(value.slice(1, -1));
-    };
+    const customValidation = value => Boolean(value.slice(1, -1));
 
     export const validator = (template) => {
         return {
             botNumber : generateValidators(true, {
+                required,
                 custom : customValidation
             }),
             userNumber : generateValidators(true, {
+                required,
                 custom : customValidation
             })
         };
     };
 
     export const meta = {
-        name    : 'select-phone-numbers',
+        name    : 'test-external-component',
         type    : 'onereach-studio-form-editor',
         version : '1.0'
     };

@@ -4,7 +4,7 @@ export default [
 ];
 
 export const meta = {
-    name    : 'test-select-numbers',
+    name    : 'test-external-component',
     type    : 'onereach-studio-plugin',
     label   : 'Test example',
     version : '1.0'

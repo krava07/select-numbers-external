@@ -207,28 +207,28 @@
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
-    // @import '../scss/colors.scss';
+    @import '../scss/colors.scss';
 
-    // .or-select__numbers {
-    //     flex-direction: column;
-    //     align-items: stretch;
+    .or-select__numbers {
+        flex-direction: column;
+        align-items: stretch;
 
-    //     .or-select__dropdown.ui-select--type-basic {
-    //         margin-bottom: 0;
-    //     }
-    // }
+        .or-select__dropdown.ui-select--type-basic {
+            margin-bottom: 0;
+        }
+    }
 
-    // .ui-select.is-invalid:not(.is-disabled) .ui-select__feedback-text {
-    //     visibility: visible;
-    // }
+    .ui-select.is-invalid:not(.is-disabled) .ui-select__feedback-text {
+        visibility: visible;
+    }
 
-    // .error-text {
-    //     position: relative;
+    .error-text {
+        position: relative;
 
-    //     margin: 0;
+        margin: 0;
 
-    //     font-size: 12px;
-    //     line-height: 1.3;
-    //     color: $danger;
-    // }
+        font-size: 12px;
+        line-height: 1.3;
+        color: $danger;
+    }
 </style>

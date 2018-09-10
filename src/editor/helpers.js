@@ -1,5 +1,7 @@
 import * as _ from 'lodash';
-import Fuse from 'fuse.js';
+import FuseModule from 'fuse.js';
+
+const Fuse = FuseModule.module.exports;
 
 /**
  * Method performs search

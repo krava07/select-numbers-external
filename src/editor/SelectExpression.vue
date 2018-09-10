@@ -154,12 +154,12 @@
                                         :selected="isOptionSelected(option)"
                                 ></slot>
                             </select-option>
-                            ТУТ БУДЕТ КНОПКА
 
                             <div class="ui-select__no-results" v-show="hasNoResults">
                                 <slot name="no-results">No results found</slot>
                             </div>
                         </ul>
+                        <div class="button-add-new">+ Add new number</div>
                     </div>
                 </transition>
             </div>
@@ -267,7 +267,6 @@
                 type: Boolean,
                 default: false
             },
-            // keen end
 
             extendableOptions : {
                 type : Boolean,
@@ -374,7 +373,6 @@
             query() {
                 this.$emit('query-change', this.query);
             },
-            //
 
             localOptions (newValue) {
                 this.$emit('update:options', newValue);
@@ -494,9 +492,7 @@
             resetTouched(options = { touched: false }) {
                 this.isTouched = options.touched;
             },
-            // keen end
 
-            // or
             setValue (value) {
                 if (!value) {
                     value = this.multiple ? [] : '';
@@ -547,8 +543,6 @@
                 const option = this.findOptionByValue(value);
                 return _.get(value, this.keys.label) || _.get(option, this.keys.label, option);
             },
-
-            // or end
 
             defaultFilter () {
                 const query = _.chain(this.simpleText ? this.query : this.getFormatedOptionTextFromValue(this.query)).toLower().trim().value();
@@ -714,442 +708,11 @@
 <style lang="scss" rel="stylesheet/scss">
 
     // --------- KEEN STYLES ------------
-
-    // @import '../scss/keen-select.scss';
-
-    @import '../scss/util.scss';
-    @import '../scss/keen-variables.scss';
-
-    .ui-select {
-        align-items: flex-start;
-        display: flex;
-        font-family: $font-stack;
-        margin-bottom: $ui-input-margin-bottom;
-        outline: none;
-        position: relative;
-        &:hover:not(.is-disabled) {
-            .ui-select__label-text {
-                color: $ui-input-label-color--hover;
-            }
-            .ui-select__display {
-                border-bottom-color: $ui-input-border-color--hover;
-            }
-            .ui-select__dropdown-button {
-                color: $ui-input-button-color--hover;
-            }
-        }
-        &.is-active:not(.is-disabled) {
-            .ui-select__label-text,
-            .ui-select__icon-wrapper .ui-icon {
-                color: $ui-input-label-color--active;
-            }
-            .ui-select__display {
-                border-bottom-color: $ui-input-border-color--active;
-                border-bottom-width: $ui-input-border-width--active;
-            }
-        }
-        &.has-floating-label {
-            .ui-select__label-text {
-                // Behaves like a block, but width is the width of its content.
-                // Needed here so label doesn't overflow parent when scaled.
-                display: table;
-                &.is-inline {
-                    color: $ui-input-label-color; // So the hover styles don't override it
-                    cursor: pointer;
-                    transform: translateY($ui-input-label-top--inline) scale(1.1);
-                }
-                &.is-floating {
-                    transform: translateY(0) scale(1);
-                }
-            }
-        }
-        &.has-label {
-            .ui-select__icon-wrapper {
-                padding-top: $ui-input-icon-margin-top--with-label;
-            }
-            .ui-select__dropdown-button {
-                top: $ui-input-button-margin-top--with-label;
-            }
-        }
-        &:not(.is-multiple) {
-            .ui-select__display {
-                height: $ui-input-height;
-                line-height: 1;
-            }
-        }
-        &.is-multiple {
-            .ui-select__display {
-                line-height: 1.4;
-                padding-bottom: rem-calc(4px);
-                padding-top: rem-calc(4px);
-            }
-        }
-        &.is-invalid:not(.is-disabled) {
-            .ui-select__label-text,
-            .ui-select__icon-wrapper .ui-icon {
-                color: $ui-input-label-color--invalid;
-            }
-            .ui-select__display {
-                border-bottom-color: $ui-input-border-color--invalid;
-            }
-            .ui-select__feedback {
-                color: $ui-input-feedback-color--invalid;
-            }
-        }
-        &.is-disabled {
-            .ui-select__display {
-                border-bottom-style: $ui-input-border-style--disabled;
-                border-bottom-width: $ui-input-border-width--active;
-                color: $ui-input-text-color--disabled;
-                cursor: default;
-            }
-            .ui-select__dropdown-button,
-            .ui-select__display-value.is-placeholder {
-                color: $ui-input-text-color--disabled;
-                opacity: $ui-input-button-opacity--disabled;
-            }
-            .ui-select__icon-wrapper .ui-icon {
-                opacity: $ui-input-icon-opacity--disabled;
-            }
-            .ui-select__feedback {
-                opacity: $ui-input-feedback-opacity--disabled;
-            }
-        }
-    }
-    .ui-select__label {
-        display: block;
-        margin: 0;
-        outline: none;
-        padding: 0;
-        position: relative;
-        width: 100%;
-    }
-    .ui-select__icon-wrapper {
-        flex-shrink: 0;
-        margin-right: $ui-input-icon-margin-right;
-        padding-top: $ui-input-icon-margin-top;
-        .ui-icon {
-            color: $ui-input-icon-color;
-        }
-    }
-    .ui-select__content {
-        flex-grow: 1;
-    }
-    .ui-select__label-text {
-        color: $ui-input-label-color;
-        cursor: default;
-        font-size: $ui-input-label-font-size;
-        line-height: $ui-input-label-line-height;
-        margin-bottom: $ui-input-label-margin-bottom;
-        transform-origin: left;
-        transition: color 0.1s ease, transform 0.2s ease;
-    }
-    .ui-select__display {
-        align-items: center;
-        border: none;
-        border-bottom-color: $ui-input-border-color;
-        border-bottom-style: solid;
-        border-bottom-width: $ui-input-border-width;
-        color: $ui-input-text-color;
-        cursor: pointer;
-        display: flex;
-        font-family: $font-stack;
-        font-size: $ui-input-text-font-size;
-        font-weight: normal;
-        padding: 0;
-        transition: border 0.1s ease;
-        user-select: none;
-        width: 100%;
-    }
-    .ui-select__display-value {
-        flex-grow: 1;
-        &.is-placeholder {
-            color: $hint-text-color;
-        }
-    }
-    .ui-select__dropdown-button {
-        color: $ui-input-button-color;
-        font-size: $ui-input-button-size;
-        margin-left: auto;
-        margin-right: rem-calc(-4px);
-    }
-    .ui-select__dropdown {
-        background-color: white;
-        box-shadow: 1px 2px 8px $md-grey-600;
-        color: $primary-text-color;
-        display: block;
-        list-style-type: none;
-        margin: 0;
-        margin-bottom: rem-calc(8px);
-        min-width: rem-calc(180px);
-        outline: none;
-        padding: 0;
-        position: absolute;
-        width: 100%;
-        z-index: $z-index-dropdown;
-    }
-    .ui-select__search-input {
-        background: none;
-        border: none;
-        border-bottom-color: $ui-input-border-color;
-        border-bottom-style: solid;
-        border-bottom-width: $ui-input-border-width;
-        border-radius: 0;
-        color: $ui-input-text-color;
-        cursor: auto;
-        font-family: $font-stack;
-        font-size: $ui-input-text-font-size - rem-calc(1px);
-        font-weight: normal;
-        height: $ui-input-height + rem-calc(4px);
-        outline: none;
-        padding: rem-calc(0 12px);
-        padding-left: rem-calc(40px);
-        transition: border 0.1s ease;
-        width: 100%;
-        // Hide Edge and IE input clear button
-        &::-ms-clear {
-            display: none;
-        }
-        &:focus + .ui-select__search-icon {
-            color: $ui-input-label-color--active;
-        }
-    }
-    .ui-select__search-icon,
-    .ui-select__search-progress {
-        position: absolute;
-        top: rem-calc(8px);
-    }
-    .ui-select__search-icon {
-        color: $ui-input-icon-color;
-        font-size: rem-calc(20px);
-        left: rem-calc(12px);
-    }
-    .ui-select__search-progress {
-        right: rem-calc(12px);
-    }
-    .ui-select__options {
-        background-color: white;
-        color: $primary-text-color;
-        display: block;
-        list-style-type: none;
-        margin: 0;
-        max-height: rem-calc(256px);
-        min-width: 100%;
-        overflow-y: auto;
-        padding: 0;
-        position: relative;
-    }
-    .ui-select__no-results {
-        color: $secondary-text-color;
-        font-size: rem-calc(14px);
-        padding: rem-calc(8px 12px);
-        width: 100%;
-    }
-    .ui-select__feedback {
-        color: $ui-input-feedback-color;
-        font-size: $ui-input-feedback-font-size;
-        line-height: $ui-input-feedback-line-height;
-        margin: 0;
-        padding-top: $ui-input-feedback-padding-top;
-        position: relative;
-    }
-    // ================================================
-    // Icon Positions
-    // ================================================
-    .ui-select--icon-position-right {
-        .ui-select__icon-wrapper {
-            margin-left: rem-calc(8px);
-            margin-right: 0;
-            order: 1;
-        }
-    }
-    // ================================================
-    // Transitions
-    // ================================================
-    .ui-select--transition-fade-enter-active,
-    .ui-select--transition-fade-leave-active {
-        transition: opacity 0.2s ease;
-    }
-    .ui-select--transition-fade-enter,
-    .ui-select--transition-fade-leave-active {
-        opacity: 0;
-    }
+    @import '../scss/keen-select.scss';
 
 
     // --------- ONEREACH STYLES ------------
-    // @import '../scss/or-select.scss';
-
-    @import '../scss/colors.scss';
-    @import '../scss/fonts.scss';
-
-    .ui-select {
-        font-family: $font-family;
-
-        &.is-disabled {
-            .ui-select__display-value {
-                color: rgba(0, 0, 0, 0.38);
-                opacity: 0.6;
-            }
-        }
-
-        .ui-select__content {
-            .ui-select__label {
-                .ui-select__label-text {
-                    font-size: 12px;
-                    color: $text-grey;
-                    line-height: 36px;
-
-                    &.is-inline {
-                        padding-left: 10px;
-                        transform: translateY(36px) scale(1.1);
-                    }
-                }
-
-                .ui-select__display {
-                    font-size: 14px;
-                    color: $dark-background;
-                    padding: 2px 10px;
-                    min-height: 36px;
-                    border-radius: 3px;
-                    background-color: $light-grey;
-                    border: solid 1px $grey-main-border-color;
-                    transition: background-color 0.5s ease-out;
-
-                    &.is-placeholder {
-                        color: $text-grey;
-                        font-size: 14px;
-                    }
-
-                    .ui-select__dropdown-button {
-                        color: $text-grey;
-                    }
-                }
-            }
-        }
-
-        .ui-select__search-icon {
-            color: $active;
-        }
-
-        .ui-select__options {
-            .ui-select-option {
-                font-family: inherit;
-                font-size: 14px;
-
-                &.is-highlighted {
-                    color: $dark-background;
-                    background-color: $light-grey;
-                }
-
-                &.is-selected {
-                    font-weight: 600;
-                    color: black;
-                }
-
-                &__checkbox {
-                    display: none;
-                }
-            }
-        }
-
-        &.is-active {
-            .ui-select__feedback-text {
-                visibility: visible;
-            }
-        }
-
-        &.dropdown-shown {
-            .ui-select__content {
-                .ui-select__label {
-                    .ui-select__display {
-                        border-bottom-left-radius: 0;
-                        border-bottom-right-radius: 0;
-                    }
-                }
-            }
-        }
-
-        &.has-floating-label {
-            .ui-select__label-text {
-                &.is-inline {
-                    transform: translateY(36px) scale(1.1);
-                    padding-left: 10px;
-                }
-            }
-        }
-
-        &.is-invalid:not(.is-disabled) {
-            .ui-select__feedback-text {
-                color: $danger;
-            }
-            .ui-select__label-text {
-                color: $danger;
-            }
-            .ui-select__display {
-                border-color: $danger;
-            }
-
-            &:hover {
-                .ui-select__display {
-                    border-color: $danger;
-                }
-            }
-        }
-
-        &:hover:not(.is-disabled):not(.dropdown-shown) {
-            .ui-select__content {
-                .ui-select__label {
-                    .ui-select__display:hover {
-                        background-color: $white;
-
-                        .ui-select__dropdown-button {
-                            color: $text-grey;
-                        }
-                    }
-                }
-            }
-        }
-
-        .ui-select__feedback-text {
-            color: rgba(0, 0, 0, 0.38);
-            line-height: 1.2;
-            font-size: 12px;
-            visibility: hidden;
-        }
-
-        /* fixing shadow of a drop-down */
-        .ui-select__dropdown {
-            width: 100%;
-            background-color: #fff;
-            box-shadow: 0 3px 16px 0 rgba(0, 0, 0, .08);
-            border-top: 0;
-            border-left: 1px solid #e4e4e4;
-            border-right: 1px solid #e4e4e4;
-            border-bottom: 1px solid #e4e4e4;
-            border-bottom-left-radius: 3px;
-            border-bottom-right-radius: 3px;
-            padding: 0;
-        }
-
-        /* fixing bad positioning for an icon with negative right margin */
-        .ui-select__dropdown-button {
-            margin: 0;
-            flex-shrink: 0;
-            font-size: 30px;
-        }
-        /* fixing bad positioning for an icon if label test exists */
-        &.has-label {
-            .ui-select__dropdown-button {
-                top: 0;
-            }
-
-            .ui-select__icon-wrapper {
-                padding-top: 41px;
-            }
-        }
-    }
-    // -------- END ONEREACH STYLES
-
+    @import '../scss/or-select.scss';
 
     // -------- SELECT EXPRESSION STYLES -----
 
@@ -1321,27 +884,14 @@
             }
         }
     }
+</style>
 
-    .or-select__numbers {
-        flex-direction: column;
-        align-items: stretch;
-
-        .or-select__dropdown.ui-select--type-basic {
-            margin-bottom: 0;
-        }
-    }
-
-    .ui-select.is-invalid:not(.is-disabled) .ui-select__feedback-text {
-        visibility: visible;
-    }
-
-    .error-text {
-        position: relative;
-
-        margin: 0;
-
+<style scoped lang="scss" rel="stylesheet/scss">
+    .button-add-new {
+        margin: 10px;
+        color: #0594ed;
+        box-sizing: content-box;
         font-size: 12px;
-        line-height: 1.3;
-        color: $danger;
+        cursor: pointer;
     }
 </style>
