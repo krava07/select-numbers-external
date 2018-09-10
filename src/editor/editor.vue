@@ -12,12 +12,13 @@
             :select-label="template.selectLabel"
             :select-placeholder="template.selectPlaceholder"
             :select-error="template.selectError"
-            :select-invalid="$v.schema.botNumber.$error"
+            :select-invalid="$v.schema[template.botNumberVariable].$error"
+            @input="onInput"
 
             :text-expression-label="template.textExpressionLabel"
             :text-expression-placeholder="template.textExpressionPlaceholder"
             :text-expression-error="template.textExpressionError"
-            :text-expression-invalid="$v.schema.userNumber.$error"
+            :text-expression-invalid="$v.schema[template.userNumberVariable].$error"
         />
     </div>
 </template>
@@ -26,7 +27,7 @@
     import {validators} from '_validators';
     import SelectNumbers from './SelectNumbers.vue';
 
-    const {generateValidators, required} = validators;
+    // const {generateValidators, required} = validators;
 
     export default {
         name       : 'editor-select-numbers',
@@ -49,22 +50,20 @@
             }
         },
 
-        created () {},
-
-        mounted () {
+        created () {
             const url = this.$flow.gatewayUrl('provider-numbers-list', this.$flow.providersAccountId());
             this.$http.post(url, {accountId : this.$flow.accountId, getSmsNumbers : true})
                 .then(response => response.json())
                 .then(responseJson => {
                     this.botNumbers = _.chain(responseJson)
-                    .map(number => ({
-                        id: number.id,
-                        label: !number.isGroup ? number.phoneNumber + ' (' + number.name + ')' : number.name,
-                        value: '`' + number.phoneNumber + '`'
-                    }))
-                    .sortBy('label')
-                    .value()
-                    .concat(this.botNumbers);
+                        .map(number => ({
+                            id: number.id,
+                            label: !number.isGroup ? number.phoneNumber + ' (' + number.name + ')' : number.name,
+                            value: '`' + number.phoneNumber + '`'
+                        }))
+                        .sortBy('label')
+                        .value()
+                        .concat(this.botNumbers);
                 });
         },
 
@@ -74,7 +73,12 @@
             };
         },
 
-        methods : {},
+        methods : {
+            onInput () {
+                this.$v.schema[this.template.botNumberVariable].$touch();
+                this.$v.schema[this.template.userNumberVariable].$touch();
+            }
+        },
 
         validations () {
             return {
@@ -85,30 +89,26 @@
     };
 
     export const data = (template) => ({
-        botNumber                 : '',
-        userNumber                : '',
-        botNumberVariable         : template.botNumberVariable,
-        userNumberVariable        : template.userNumberVariable,
-        selectLabel               : template.selectLabel,
-        selectPlaceholder         : template.selectPlaceholder,
-        selectError               : template.selectError,
-        textExpressionLabel       : template.textExpressionLabel,
-        textExpressionPlaceholder : template.textExpressionPlaceholder,
-        textExpressionError       : template.textExpressionError
+        [template.botNumberVariable]  : '',
+        [template.userNumberVariable] : '',
+        selectLabel                   : template.selectLabel,
+        selectPlaceholder             : template.selectPlaceholder,
+        selectError                   : template.selectError,
+        textExpressionLabel           : template.textExpressionLabel,
+        textExpressionPlaceholder     : template.textExpressionPlaceholder,
+        textExpressionError           : template.textExpressionError
     });
 
-    const customValidation = value => Boolean(value.slice(1, -1));
+    const customValidation = value => Boolean(value.slice(1,-1));
 
     export const validator = (template) => {
         return {
-            botNumber : generateValidators(true, {
-                required,
+            [template.botNumberVariable] : {
                 custom : customValidation
-            }),
-            userNumber : generateValidators(true, {
-                required,
+            },
+            [template.userNumberVariable] : {
                 custom : customValidation
-            })
+            }
         };
     };
 
