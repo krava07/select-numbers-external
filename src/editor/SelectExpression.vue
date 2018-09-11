@@ -159,7 +159,7 @@
                                 <slot name="no-results">No results found</slot>
                             </div>
                         </ul>
-                        <div class="button-add-new">+ Add new number</div>
+                        <div class="button-add-new" @click="addNewNumber">+ Add new number</div>
                     </div>
                 </transition>
             </div>
@@ -174,12 +174,19 @@
                 </div>
             </div>
         </div>
+        <div class="container container_for-modal">
+            <buy-modal
+                ref="buyModal"
+                :numbers="allAvailableNumbers"
+            ></buy-modal>
+        </div>
     </div>
 </template>
 
 <script>
     import * as _ from 'lodash';
     import SelectOption from './SelectOption.vue';
+    import BuyModal from './modal/buyModal.vue';
 
     import { fuzzySearch, getReadableTextExpression, looseIndexOf, looseEqual, scrollIntoView, resetScroll } from './helpers.js';
 
@@ -188,7 +195,8 @@
         name    : 'select-expression',
 
         components : {
-            SelectOption
+            SelectOption,
+            BuyModal
         },
 
         props : {
@@ -307,7 +315,9 @@
             matchFromStart    : {
                 type    : Boolean,
                 default : false
-            }
+            },
+
+            allAvailableNumbers : Array
         },
 
         created() {
@@ -596,7 +606,10 @@
                     mergeTagLeftWrapper  : '<span class="merge-tag">{',
                     mergeTagRightWrapper : '}</span>'
                 });
-            }
+            },
+            addNewNumber () {
+                this.$refs.buyModal.openModal();
+            },
         },
 
         computed : {
