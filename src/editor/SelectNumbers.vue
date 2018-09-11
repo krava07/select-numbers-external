@@ -15,8 +15,6 @@
                 :disabled="readonly"
                 :invalid="selectInvalid"
                 :error="selectError"
-
-                :all-available-numbers="allAvailableNumbers"
         />
 
         <or-text-expression
@@ -118,7 +116,7 @@
             isNew : {
                 type : Boolean
             },
-            allAvailableNumbers : Array
+            // allAvailableNumbers : Array
         },
 
         computed : {

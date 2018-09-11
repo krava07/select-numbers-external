@@ -317,13 +317,14 @@
                 default : false
             },
 
-            allAvailableNumbers : Array
+            // allAvailableNumbers : Array
         },
 
         created() {
             if (!this.value || this.value === '') {
                 this.setValue(null);
             }
+            this.getAllAvailableNumbers();
         },
 
         mounted () {
@@ -362,7 +363,8 @@
                     distance  : 500
                 },
                 query         : this.simpleText ? '' : '``',
-                localOptions  : _.clone(this.options)
+                localOptions  : _.clone(this.options),
+                allAvailableNumbers : []
             };
         },
 
@@ -607,9 +609,24 @@
                     mergeTagRightWrapper : '}</span>'
                 });
             },
+
             addNewNumber () {
                 this.$refs.buyModal.openModal();
             },
+            getAllAvailableNumbers () {
+                this.$http.get(this.$flow.gatewayUrl('identifiers', this.$flow.providersAccountId()), {
+                    headers: {
+                        Authorization: `USER ${this.$settings.token}`
+                    },
+                    params: {
+                        groupDetails: 'true',
+                        channel: 'text'
+                    }
+                })
+                .then(response => {
+                    this.allAvailableNumbers = response.json();
+                });
+            }
         },
 
         computed : {

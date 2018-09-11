@@ -53,13 +53,13 @@
         },
 
         created () {
-            // this.schema.isNew = this.isNew;
             this.fetchBotNumbers();
         },
 
         data () {
             return {
-                botNumbers: []
+                botNumbers: [],
+                // allAvailableNumbers: []
             };
         },
 
@@ -73,6 +73,7 @@
                 this.$http.post(url, {accountId : this.$flow.accountId, getSmsNumbers : true})
                     .then(response => response.json())
                     .then(responseJson => {
+                        // this.allAvailableNumbers = responseJson;
                         this.botNumbers = _.chain(responseJson)
                             .map(number => ({
                                 id: number.id,
