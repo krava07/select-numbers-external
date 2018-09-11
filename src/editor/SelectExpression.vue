@@ -623,8 +623,10 @@
                         channel: 'text'
                     }
                 })
-                .then(response => {
-                    this.allAvailableNumbers = response.json();
+                .then(response => response.json())
+                .then(responseJson => {
+                    console.log(responseJson);
+                    this.allAvailableNumbers = responseJson;
                 });
             }
         },
