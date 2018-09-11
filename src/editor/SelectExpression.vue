@@ -317,14 +317,15 @@
                 default : false
             },
 
-            // allAvailableNumbers : Array
+            allAvailableNumbers : {
+                type : Array
+            }
         },
 
-        created() {
+        created () {
             if (!this.value || this.value === '') {
                 this.setValue(null);
             }
-            this.getAllAvailableNumbers();
         },
 
         mounted () {
@@ -612,22 +613,6 @@
 
             addNewNumber () {
                 this.$refs.buyModal.openModal();
-            },
-            getAllAvailableNumbers () {
-                this.$http.get(this.$flow.gatewayUrl('identifiers', this.$flow.providersAccountId()), {
-                    headers: {
-                        Authorization: `USER ${this.$settings.token}`
-                    },
-                    params: {
-                        groupDetails: 'true',
-                        channel: 'text'
-                    }
-                })
-                .then(response => response.json())
-                .then(responseJson => {
-                    console.log(responseJson);
-                    this.allAvailableNumbers = responseJson;
-                });
             }
         },
 
@@ -919,9 +904,11 @@
 </style>
 
 <style scoped lang="scss" rel="stylesheet/scss">
+    @import '../scss/colors.scss';
+
     .button-add-new {
         margin: 10px;
-        color: #0594ed;
+        color: $active;
         box-sizing: content-box;
         font-size: 12px;
         cursor: pointer;

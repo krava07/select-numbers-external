@@ -21,6 +21,7 @@
             :text-expression-invalid="$v.schema[template.userNumberVariable].$error"
 
             :is-new="isNew"
+            :all-available-numbers="allAvailableNumbers"
         />
     </div>
 </template>
@@ -28,6 +29,7 @@
     import * as _ from 'lodash';
     import {validators} from '_validators';
     import SelectNumbers from './SelectNumbers.vue';
+    import eventHub from './eventHub.js';
 
     // const {generateValidators, required} = validators;
 
@@ -53,13 +55,17 @@
         },
 
         created () {
-            this.fetchBotNumbers();
+            this.updateNumbersData();
+            eventHub.$on('update numbers data', this.updateNumbersData);
+        },
+        destroyed () {
+            eventHub.$off('update numbers data', this.updateNumbersData);
         },
 
         data () {
             return {
                 botNumbers: [],
-                // allAvailableNumbers: []
+                allAvailableNumbers: []
             };
         },
 
@@ -68,12 +74,12 @@
                 this.$v.schema[this.template.botNumberVariable].$touch();
                 this.$v.schema[this.template.userNumberVariable].$touch();
             },
-            fetchBotNumbers () {
+            updateNumbersData () {
                 const url = this.$flow.gatewayUrl('provider-numbers-list', this.$flow.providersAccountId());
                 this.$http.post(url, {accountId : this.$flow.accountId, getSmsNumbers : true})
                     .then(response => response.json())
                     .then(responseJson => {
-                        // this.allAvailableNumbers = responseJson;
+                        this.allAvailableNumbers = responseJson;
                         this.botNumbers = _.chain(responseJson)
                             .map(number => ({
                                 id: number.id,

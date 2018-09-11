@@ -7,7 +7,6 @@
     title=""
     ref="modal"
   >
-    {{ numbers }}
     <div class="buy-modal-left">
       <div class="map">
         <span class="map__state">Select state on the map: <span>{{selectedState.name}}</span></span>
