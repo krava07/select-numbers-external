@@ -102,8 +102,8 @@
     };
 
     export const data = (template) => ({
-        [template.botNumberVariable]  : '',
-        [template.userNumberVariable] : '',
+        [template.botNumberVariable]  : '``',
+        [template.userNumberVariable] : '``',
         selectLabel                   : template.selectLabel,
         selectPlaceholder             : template.selectPlaceholder,
         selectError                   : template.selectError,
