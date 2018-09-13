@@ -28,6 +28,7 @@
                 :readonly="readonly"
                 :invalid="textExpressionInvalid"
                 :error="textExpressionError"
+                :help-text="textExpressionHelp"
         >
         </or-text-expression>
     </div>
@@ -121,6 +122,9 @@
             },
             allAvailableNumbers : {
                 type : Array
+            },
+            textExpressionHelp : {
+                type : String
             }
         },
 

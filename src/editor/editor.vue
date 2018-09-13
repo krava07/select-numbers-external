@@ -19,6 +19,7 @@
             :text-expression-placeholder="template.textExpressionPlaceholder"
             :text-expression-error="template.textExpressionError"
             :text-expression-invalid="$v.schema[template.userNumberVariable].$error"
+            :text-expression-help="template.textExpressionHelp"
 
             :is-new="isNew"
             :all-available-numbers="allAvailableNumbers"
@@ -110,6 +111,7 @@
         textExpressionLabel           : template.textExpressionLabel,
         textExpressionPlaceholder     : template.textExpressionPlaceholder,
         textExpressionError           : template.textExpressionError,
+        textExpressionHelp            : template.textExpressionHelp,
         isNew                         : template.isNew
     });
 

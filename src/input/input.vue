@@ -53,6 +53,11 @@
                         help="input error text">
             </or-textbox>
 
+            <or-textbox name="label" label="Text expression help text" placeholder="Help text"
+                        v-model="input.data.textExpressionHelp"
+                        help="input help text">
+            </or-textbox>
+
             <div slot="footer">
                 <or-button color="primary"
                            type="secondary"
@@ -89,6 +94,7 @@
         textExpressionLabel       : 'End user phone number',
         textExpressionPlaceholder : '+12323424324',
         textExpressionError       : 'The end user phone number field is required.',
+        textExpressionHelp        : "Make sure you've entered valid phone number",
         validateRequired          : true
     };
 
